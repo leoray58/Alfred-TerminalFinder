@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>bundleid</key>
+  <string>de.leenno.terminalfinder.ghostty</string>
+  <key>connections</key>
+  <dict>
+    <key>11111111-1111-1111-1111-111111111111</key>
+    <array>
+      <dict>
+        <key>destinationuid</key>
+        <string>11111111-1111-1111-1111-111111111112</string>
+        <key>modifiers</key>
+        <integer>0</integer>
+        <key>modifiersubtext</key>
+        <string></string>
+        <key>vitoclose</key>
+        <false/>
+      </dict>
+    </array>
+    <key>22222222-2222-2222-2222-222222222221</key>
+    <array>
+      <dict>
+        <key>destinationuid</key>
+        <string>22222222-2222-2222-2222-222222222222</string>
+        <key>modifiers</key>
+        <integer>0</integer>
+        <key>modifiersubtext</key>
+        <string></string>
+        <key>vitoclose</key>
+        <false/>
+      </dict>
+    </array>
+    <key>33333333-3333-3333-3333-333333333331</key>
+    <array>
+      <dict>
+        <key>destinationuid</key>
+        <string>33333333-3333-3333-3333-333333333332</string>
+        <key>modifiers</key>
+        <integer>0</integer>
+        <key>modifiersubtext</key>
+        <string></string>
+        <key>vitoclose</key>
+        <false/>
+      </dict>
+    </array>
+    <key>44444444-4444-4444-4444-444444444441</key>
+    <array>
+      <dict>
+        <key>destinationuid</key>
+        <string>44444444-4444-4444-4444-444444444442</string>
+        <key>modifiers</key>
+        <integer>0</integer>
+        <key>modifiersubtext</key>
+        <string></string>
+        <key>vitoclose</key>
+        <false/>
+      </dict>
+    </array>
+    <key>55555555-5555-5555-5555-555555555551</key>
+    <array>
+      <dict>
+        <key>destinationuid</key>
+        <string>55555555-5555-5555-5555-555555555552</string>
+        <key>modifiers</key>
+        <integer>0</integer>
+        <key>modifiersubtext</key>
+        <string></string>
+        <key>vitoclose</key>
+        <false/>
+      </dict>
+    </array>
+  </dict>
+  <key>createdby</key>
+  <string>Codex</string>
+  <key>description</key>
+  <string>TerminalFinder-compatible workflow with Finder ⇄ Terminal and Finder ⇄ Ghostty actions.</string>
+  <key>disabled</key>
+  <false/>
+  <key>name</key>
+  <string>TerminalFinder Ghostty</string>
+  <key>objects</key>
+  <array>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>argumenttype</key>
+        <integer>2</integer>
+        <key>keyword</key>
+        <string>ft</string>
+        <key>subtext</key>
+        <string>Open current Finder directory in Terminal</string>
+        <key>text</key>
+        <string>Finder → Terminal</string>
+        <key>withspace</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.input.keyword</string>
+      <key>uid</key>
+      <string>11111111-1111-1111-1111-111111111111</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>concurrently</key>
+        <false/>
+        <key>escaping</key>
+        <integer>102</integer>
+        <key>script</key>
+        <string>#!/bin/zsh
+
+set -u
+
+if ! path="$(/usr/bin/osascript &lt;&lt;'APPLESCRIPT' 2&gt;/dev/null
+tell application "Finder"
+  if (count of windows) is 0 then error "No Finder window is open."
+  set theSelection to selection
+  if (count of theSelection) is not 0 then
+    return POSIX path of ((item 1 of theSelection) as alias)
+  end if
+  return POSIX path of (folder of the front window as alias)
+end tell
+APPLESCRIPT
+)"; then
+  /usr/bin/osascript -e 'display notification "Finder 路径获取失败，请检查 Alfred 的自动化权限" with title "TerminalFinder Ghostty"'
+  exit 1
+fi
+
+open -a Terminal "$path"</string>
+        <key>scriptargtype</key>
+        <integer>1</integer>
+        <key>scriptfile</key>
+        <string></string>
+        <key>type</key>
+        <integer>0</integer>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.action.script</string>
+      <key>uid</key>
+      <string>11111111-1111-1111-1111-111111111112</string>
+      <key>version</key>
+      <integer>2</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>argumenttype</key>
+        <integer>2</integer>
+        <key>keyword</key>
+        <string>tf</string>
+        <key>subtext</key>
+        <string>Open current Terminal directory in Finder</string>
+        <key>text</key>
+        <string>Terminal → Finder</string>
+        <key>withspace</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.input.keyword</string>
+      <key>uid</key>
+      <string>22222222-2222-2222-2222-222222222221</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>concurrently</key>
+        <false/>
+        <key>escaping</key>
+        <integer>102</integer>
+        <key>script</key>
+        <string>#!/bin/zsh
+
+if ! /usr/bin/osascript &lt;&lt;'APPLESCRIPT' 2&gt;/dev/null
+tell application "Terminal"
+  do script "open -a Finder ./" in first window
+end tell
+APPLESCRIPT
+then
+  /usr/bin/osascript -e 'display notification "Terminal 路径获取失败，请确认 Terminal 已打开且 Alfred 有自动化权限" with title "TerminalFinder Ghostty"'
+  exit 1
+fi</string>
+        <key>scriptargtype</key>
+        <integer>1</integer>
+        <key>scriptfile</key>
+        <string></string>
+        <key>type</key>
+        <integer>0</integer>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.action.script</string>
+      <key>uid</key>
+      <string>22222222-2222-2222-2222-222222222222</string>
+      <key>version</key>
+      <integer>2</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>argumenttype</key>
+        <integer>2</integer>
+        <key>keyword</key>
+        <string>fg</string>
+        <key>subtext</key>
+        <string>Open current Finder directory in Ghostty</string>
+        <key>text</key>
+        <string>Finder → Ghostty</string>
+        <key>withspace</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.input.keyword</string>
+      <key>uid</key>
+      <string>33333333-3333-3333-3333-333333333331</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>applescript</key>
+        <string>on alfred_script(q)
+  tell application "Finder"
+    set pathList to ""
+    try
+      set theSelection to selection
+      if (count of theSelection) &gt; 0 then
+        set theItem to item 1 of theSelection
+        set itemClass to class of theItem
+        if itemClass is folder or itemClass is disk then
+          set pathList to POSIX path of (theItem as alias)
+        end if
+      end if
+    end try
+
+    if pathList is "" then
+      set pathList to POSIX path of (folder of the front window as alias)
+    end if
+  end tell
+
+  tell application "Ghostty"
+    set cfg to new surface configuration
+    set initial working directory of cfg to pathList
+    new window with configuration cfg
+    activate
+  end tell
+end alfred_script</string>
+        <key>cachescript</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.action.applescript</string>
+      <key>uid</key>
+      <string>33333333-3333-3333-3333-333333333332</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>argumenttype</key>
+        <integer>2</integer>
+        <key>keyword</key>
+        <string>gf</string>
+        <key>subtext</key>
+        <string>Open current Ghostty directory in Finder</string>
+        <key>text</key>
+        <string>Ghostty → Finder</string>
+        <key>withspace</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.input.keyword</string>
+      <key>uid</key>
+      <string>44444444-4444-4444-4444-444444444441</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>applescript</key>
+        <string>on alfred_script(q)
+  tell application "Ghostty"
+    set pathList to working directory of focused terminal of selected tab of front window
+  end tell
+
+  set cmd to "open " &amp; (quoted form of pathList)
+  tell current application to do shell script cmd
+end alfred_script</string>
+        <key>cachescript</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.action.applescript</string>
+      <key>uid</key>
+      <string>44444444-4444-4444-4444-444444444442</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>argumenttype</key>
+        <integer>2</integer>
+        <key>keyword</key>
+        <string>fcp</string>
+        <key>subtext</key>
+        <string>Copy current Finder directory path</string>
+        <key>text</key>
+        <string>Finder → Copy Path</string>
+        <key>withspace</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.input.keyword</string>
+      <key>uid</key>
+      <string>55555555-5555-5555-5555-555555555551</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+    <dict>
+      <key>config</key>
+      <dict>
+        <key>applescript</key>
+        <string>on alfred_script(q)
+  tell application "Finder"
+    if (count of windows) is 0 then error "No Finder window is open."
+    set theSelection to selection
+    if (count of theSelection) is not 0 then
+      set pathList to POSIX path of ((item 1 of theSelection) as alias)
+    else
+      set pathList to POSIX path of (folder of the front window as alias)
+    end if
+  end tell
+
+  set the clipboard to pathList
+  display notification "已复制 Finder 路径" with title "TerminalFinder Ghostty"
+end alfred_script</string>
+        <key>cachescript</key>
+        <false/>
+      </dict>
+      <key>type</key>
+      <string>alfred.workflow.action.applescript</string>
+      <key>uid</key>
+      <string>55555555-5555-5555-5555-555555555552</string>
+      <key>version</key>
+      <integer>1</integer>
+    </dict>
+  </array>
+  <key>readme</key>
+  <string>Based on LeEnno/alfred-terminalfinder, extended with Ghostty support.</string>
+  <key>uidata</key>
+  <dict>
+    <key>11111111-1111-1111-1111-111111111111</key>
+    <dict>
+      <key>xpos</key>
+      <real>120</real>
+      <key>ypos</key>
+      <real>120</real>
+    </dict>
+    <key>11111111-1111-1111-1111-111111111112</key>
+    <dict>
+      <key>xpos</key>
+      <real>360</real>
+      <key>ypos</key>
+      <real>120</real>
+    </dict>
+    <key>22222222-2222-2222-2222-222222222221</key>
+    <dict>
+      <key>xpos</key>
+      <real>120</real>
+      <key>ypos</key>
+      <real>260</real>
+    </dict>
+    <key>22222222-2222-2222-2222-222222222222</key>
+    <dict>
+      <key>xpos</key>
+      <real>360</real>
+      <key>ypos</key>
+      <real>260</real>
+    </dict>
+    <key>33333333-3333-3333-3333-333333333331</key>
+    <dict>
+      <key>xpos</key>
+      <real>120</real>
+      <key>ypos</key>
+      <real>400</real>
+    </dict>
+    <key>33333333-3333-3333-3333-333333333332</key>
+    <dict>
+      <key>xpos</key>
+      <real>360</real>
+      <key>ypos</key>
+      <real>400</real>
+    </dict>
+    <key>44444444-4444-4444-4444-444444444441</key>
+    <dict>
+      <key>xpos</key>
+      <real>120</real>
+      <key>ypos</key>
+      <real>540</real>
+    </dict>
+    <key>44444444-4444-4444-4444-444444444442</key>
+    <dict>
+      <key>xpos</key>
+      <real>360</real>
+      <key>ypos</key>
+      <real>540</real>
+    </dict>
+    <key>55555555-5555-5555-5555-555555555551</key>
+    <dict>
+      <key>xpos</key>
+      <real>120</real>
+      <key>ypos</key>
+      <real>680</real>
+    </dict>
+    <key>55555555-5555-5555-5555-555555555552</key>
+    <dict>
+      <key>xpos</key>
+      <real>360</real>
+      <key>ypos</key>
+      <real>680</real>
+    </dict>
+  </dict>
+  <key>variablesdontexport</key>
+  <array/>
+  <key>version</key>
+  <string>1.0.0</string>
+  <key>webaddress</key>
+  <string>https://github.com/LeEnno/alfred-terminalfinder</string>
+</dict>
+</plist>
